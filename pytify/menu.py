@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 import curses
 from curses import panel
-from strategy import get_pytify_class_by_platform
+from pytify.strategy import get_pytify_class_by_platform
 
 
 """
@@ -22,11 +23,16 @@ class Menu(object):
         self.song_length = len(items) - 1
 
         self.items.append(' ')
-        self.items.append('<UP> and <DOWN> for navigation.')
-        self.items.append('<Enter> to select song.')
-        self.items.append('<Esc> for search.')
-        self.items.append('<LEFT> and <RIGHT> for prev/next song.')
-        self.items.append('<SPACEBAR> for play/pause.')
+        self.items.append('Keyboard shortcuts')
+        self.items.append('==================')
+        self.items.append('Navigation (Vim bindings):')
+        self.items.append('  <K> <up> ')
+        self.items.append('  <J> <down> ')
+        self.items.append('  <H> <left> ')
+        self.items.append('  <L> <right> ')
+        self.items.append('Play: <P>')
+        self.items.append('Search: <S>')
+        self.items.append('Play/Pause: <SPACEBAR>')
 
     def navigate(self, n):
         self.position += n
@@ -55,27 +61,32 @@ class Menu(object):
 
             key = self.window.getch()
 
-            if key in [curses.KEY_ENTER, ord('\n')]:
+            # Start song
+            if key == ord('p'):
                 self.pytify.listen(int(self.position - 1))
 
-            elif key == curses.KEY_UP:
+            # Up
+            elif key == ord('k'):
                 self.navigate(-1)
 
-            elif key == curses.KEY_DOWN:
+            # Down
+            elif key == ord('j'):
                 self.navigate(1)
 
-            elif key == curses.KEY_LEFT:
+            # Left
+            elif key == ord('h'):
                 self.pytify.prev()
 
-            elif key == curses.KEY_RIGHT:
+            # Rights
+            elif key == ord('l'):
                 self.pytify.next()
 
-            # spacebar
-            elif key == 32:
+            # Play/Pause
+            elif key == ord(' '):
                 self.pytify.play_pause()
 
-            # escape
-            elif key == 27:
+            # Search
+            elif key == ord('s'):
                 break
 
         self.window.clear()

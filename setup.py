@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = '2.0.5'
+__version__ = '3.0.1'
 
 setup(
     name='pytify',
@@ -13,7 +13,7 @@ setup(
     license='MIT',
     keywords='spotify pytify song search curses',
     packages=['pytify'],
-    install_requires=['requests'],
+    install_requires=['requests','prompt-toolkit'],
     entry_points={'console_scripts': ['pytify=pytify.cli:main']},
     classifiers=[
         'Intended Audience :: End Users/Desktop',
