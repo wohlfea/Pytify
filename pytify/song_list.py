@@ -76,7 +76,7 @@ class SongList():
                 else:
                     mode = curses.A_NORMAL
 
-                self.window.addstr(index, 1, str(item), mode)
+                self.window.addstr(index, 1, unicode(item).encode('utf-8'), mode)
 
             key = self.window.getch()
 
