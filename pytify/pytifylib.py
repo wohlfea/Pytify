@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import requests
 import sys
 
@@ -97,7 +98,10 @@ class Pytifylib:
         return str(self._songs[index]['href'])
 
     def _get_song_name_at_index(self, index):
-        return str('%s - %s' % (self._songs[index]['artist'], self._songs[index]['song']))
+        return str(
+            '%s - %s' % (self._songs[index]['artist'],
+                         self._songs[index]['song'])
+        )
 
     def listen(self, index):
         raise NotImplementedError()
@@ -122,3 +126,6 @@ class Pytifylib:
 
     def pause(self):
         raise NotImplementedError()
+
+    def get_current_playing(self):
+        return ''

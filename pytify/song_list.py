@@ -1,38 +1,54 @@
-from __future__ import absolute_import
-import curses
+from __future__ import absolute_import, unicode_literals
+import curses, sys
 from curses import panel
 from pytify.strategy import get_pytify_class_by_platform
 
 
-"""
- TODO: Rewrite this crappy menu class
-"""
-
-
-class Menu(object):
-    def __init__(self, items, stdscreen):
+class SongList():
+    def __init__(self, items):
         self.pytify = get_pytify_class_by_platform()()
-        self.window = stdscreen.subwin(0, 0)
+        self.items = items
+
+        self.position = 2
+        self.song_length = len(items) - 1
+
+        # Init curses screen
+        self.window = curses.initscr()
+
         self.window.keypad(1)
+
         self.panel = panel.new_panel(self.window)
         self.panel.hide()
         panel.update_panels()
 
-        self.position = 2
-        self.items = items
-        self.song_length = len(items) - 1
+        # Show shortcuts
+        self.shortcuts()
 
+        # Disable echoing of keys to the screen
+        curses.noecho()
+
+        # Disable blinking cursor
+        curses.curs_set(False)
+
+        # Use user terminal settings
+        curses.endwin()
+
+        # Display window
+        self.display()
+
+    def shortcuts(self):
         self.items.append(' ')
         self.items.append('Keyboard shortcuts')
         self.items.append('==================')
-        self.items.append('Navigation (Vim bindings):')
-        self.items.append('  <K> <up> ')
-        self.items.append('  <J> <down> ')
-        self.items.append('  <H> <left> ')
-        self.items.append('  <L> <right> ')
-        self.items.append('Play: <P>')
-        self.items.append('Search: <S>')
-        self.items.append('Play/Pause: <SPACEBAR>')
+        self.items.append('Navigation:')
+        self.items.append('  <k> <up> ')
+        self.items.append('  <j> <down> ')
+        self.items.append('Prev: <h> <left>')
+        self.items.append('Next: <l> <right>')
+        self.items.append('Play: <p> <enter>')
+        self.items.append('Search: <s>')
+        self.items.append('Play/Pause: <spacebar>')
+        self.items.append('Quit: <q>')
 
     def navigate(self, n):
         self.position += n
@@ -46,6 +62,9 @@ class Menu(object):
         self.panel.top()
         self.panel.show()
         self.window.clear()
+
+        # Play keys.
+        play = lambda c: c == ord('p') or c == curses.KEY_ENTER or c == 10 or c == 13
 
         while True:
             self.window.refresh()
@@ -62,23 +81,23 @@ class Menu(object):
             key = self.window.getch()
 
             # Start song
-            if key == ord('p'):
+            if play(key):
                 self.pytify.listen(int(self.position - 1))
 
             # Up
-            elif key == ord('k'):
+            elif key == ord('k') or key == curses.KEY_UP:
                 self.navigate(-1)
 
             # Down
-            elif key == ord('j'):
+            elif key == ord('j') or key == curses.KEY_DOWN:
                 self.navigate(1)
 
             # Left
-            elif key == ord('h'):
+            elif key == ord('h') or key == curses.KEY_LEFT:
                 self.pytify.prev()
 
             # Rights
-            elif key == ord('l'):
+            elif key == ord('l') or key == curses.KEY_RIGHT:
                 self.pytify.next()
 
             # Play/Pause
@@ -88,6 +107,12 @@ class Menu(object):
             # Search
             elif key == ord('s'):
                 break
+
+            # Search
+            elif key == ord('q'):
+                curses.endwin()
+                sys.exit()
+
 
         self.window.clear()
         self.panel.hide()

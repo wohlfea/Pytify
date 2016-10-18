@@ -9,7 +9,7 @@ Linux and OS X support.
 Python 3 support. For Python 2 support use this release: [v2.1.0](https://github.com/bjarneo/Pytify/tree/v2.1.0)
 
 ![Image of terminal]
-(http://i.imgur.com/I1uvoVx.gif)
+(http://i.imgur.com/1n4UP60.gif)
 
 
 ## Installation
@@ -17,8 +17,15 @@ Python 3 support. For Python 2 support use this release: [v2.1.0](https://github
 $ sudo pip install pytify
 ```
 
+Linux you need to install `python-dbus` package.
+```bash
+$ # Example using apt-get
+$ apt-get install python-dbus
+```
+
 ## Features
 * Auto suggest (based on history)
+* Tab through history
 * Search history
 * Search and play songs
 * CLI commands
@@ -44,6 +51,9 @@ $ pytify -p
 
 # play and pause song
 $ pytify -pp
+
+# Current playing song (linux only)
+$ pytify -c
 ```
 
 ### Dependency
@@ -62,3 +72,4 @@ Contributions are appreciated.
 - [@ymski](https://github.com/ymski) - OS X
 - [@wohlfea](https://github.com/wohlfea) - Made it compatible with python 3.5
 - [@ddiddi](https://github.com/ddiddi) - Added search phrase history browsing. (auto complete)
+- [@kmatt](https://github.com/kmatt) - Minor UX changes
